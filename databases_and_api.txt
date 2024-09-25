@@ -1,0 +1,12 @@
+NBA- kaggle can be used for database, provides all 30 teams with over 4800 players and every game since 1946. also includes box scores for over 95% of games and play-by-play game data
+https://www.kaggle.com/datasets/wyattowalsh/basketball/data
+Premier League & NFL- could scrape data from https://fbref.com/en/comps/9/history/Premier-League-Seasons and football-reference for all relevent data, package into CSV and put into database... but that's a lot. hopefully something easier
+
+
+
+
+
+
+
+Sportradar API can be used to track games in real time, possibly displaying them somewhere in the webpage when doing trivia or other minigames? possibly paid :(
+https://developer.sportradar.com/getting-started/docs/coverage-information
