@@ -10,3 +10,150 @@ Premier League & NFL- could scrape data from https://fbref.com/en/comps/9/histor
 
 Sportradar API can be used to track games in real time, possibly displaying them somewhere in the webpage when doing trivia or other minigames? possibly paid :(
 https://developer.sportradar.com/getting-started/docs/coverage-information
+
+
+
+Systems Architecture Diagram
+The high-level components of the system include:
+
+Frontend (React.js): Hosted on AWS S3 + CloudFront for static file distribution.
+Backend (Node.js + Express): Hosted on AWS Elastic Beanstalk or EC2.
+Database (MySQL): Initially local, migrating to AWS RDS.
+Machine Learning Model: Generates daily stats (can be hosted locally at first, then moved to AWS Lambda or SageMaker).
+User Authentication (AWS Cognito): Handles user sign-ups, logins, and sessions.
+Storage (AWS S3): Stores static assets (images, graphs).
+Data Pipeline: Fetches basketball statistics from the online database and processes them for display and machine learning.
+1. Frontend (React.js)
+Tools: React.js, AWS S3, AWS CloudFront.
+Steps:
+Build your React frontend locally (npm run build).
+Hosting on AWS:
+Create an S3 bucket, enable static website hosting.
+Upload the build files to the bucket (aws s3 sync ./build s3://your-bucket-name).
+Set up CloudFront to cache and serve your React app globally.
+Use AWS Route 53 for custom domain setup if needed.
+Key Points:
+React will handle the user interface and integrate with your backend API for stat retrieval.
+Use environment variables to configure API endpoints for backend services.
+2. Backend (Node.js + Express)
+Tools: Node.js, Express, AWS Elastic Beanstalk or EC2, AWS API Gateway.
+
+Steps:
+
+Set up your backend using Node.js and Express locally.
+Define API routes for user interactions (e.g., retrieving daily stats, submitting guesses).
+Connect to your local MySQL database for testing.
+Hosting on AWS:
+Option 1: AWS Elastic Beanstalk for easy deployment.
+Option 2: Host on an EC2 instance (requires more setup but gives you control).
+Use API Gateway to manage API endpoints and connect them to AWS Lambda functions (if going serverless) or your Node.js backend.
+Security:
+Enable HTTPS via AWS Certificate Manager (ACM).
+Ensure API routes are protected using AWS Cognito authentication tokens.
+Key Points:
+
+API will handle requests for user data, daily stats, and ML-generated stats.
+Backend connects to the database (local MySQL for now, later AWS RDS).
+Middleware for request validation and error handling.
+3. Database (MySQL to AWS RDS)
+Tools: MySQL (local), AWS RDS (future).
+
+Steps:
+
+Local Development:
+Set up your local MySQL instance.
+Create the necessary tables for storing user information, daily stats, and historical game data.
+Migrating to AWS RDS:
+When ready, set up an AWS RDS instance (choose MySQL).
+Use MySQL Workbench or CLI tools to migrate your local database to RDS.
+Ensure proper backups and multi-AZ setup for high availability.
+Database Schema:
+Tables for storing user data, stats, machine learning results, and game histories.
+Key Points:
+
+Your backend will connect to RDS using a MySQL client.
+Use environment variables for your database connection strings (securely store credentials).
+4. Authentication (AWS Cognito)
+Tools: AWS Cognito, AWS Amplify (optional).
+
+Steps:
+
+Create a Cognito User Pool for managing user authentication.
+Set up sign-up, sign-in, and password reset functionality.
+Use Cognito's hosted UI or build your own using AWS Amplify or the AWS Cognito SDK.
+Integrate Cognito authentication into your React app.
+Use Amplify's Auth module or the AWS Cognito SDK to handle user login/logout in your frontend.
+Protect API routes on your backend by verifying Cognito tokens.
+Key Points:
+
+Cognito handles user authentication, session management, and user data.
+Use JWT tokens to authorize user actions and protect API routes.
+5. Machine Learning (AWS SageMaker or Lambda)
+Tools: Python (Scikit-learn, TensorFlow, PyTorch), AWS SageMaker (for deployment), AWS Lambda (for serverless model).
+
+Steps:
+
+Local Development:
+Train a machine learning model that processes basketball stats and generates new insights (daily stat, comparisons, etc.).
+Start with a simple model locally using scikit-learn or TensorFlow.
+AWS SageMaker (Optional):
+Once your model is ready, deploy it on AWS SageMaker for scalable inference.
+AWS Lambda for ML Inference:
+Another option is deploying a lightweight model on AWS Lambda to make predictions serverlessly (ideal for daily stat generation).
+Integration:
+Your backend can call the ML model daily (via Lambda or SageMaker) and store results in your database.
+Results are sent to the frontend to display new stats to users.
+Key Points:
+
+Use pre-trained models or custom models to generate stats.
+SageMaker is useful if you want a managed ML environment with training capabilities.
+6. Storage (AWS S3 for Static Assets)
+Tools: AWS S3.
+
+Steps:
+
+Use AWS S3 to store any static assets you need for your app (e.g., basketball stat charts, player images).
+Provide S3 URLs to your frontend for displaying images, graphs, or other media.
+Key Points:
+
+Secure S3 bucket and only make assets public that need to be.
+Use S3 lifecycle policies to manage costs by moving unused assets to cheaper storage.
+7. Daily Job Scheduling (AWS CloudWatch + Lambda)
+Tools: AWS CloudWatch, AWS Lambda.
+
+Steps:
+
+Set up a scheduled CloudWatch event to trigger an AWS Lambda function every day.
+The Lambda function should call your machine learning model, fetch new data from the online database, and store the result in RDS or DynamoDB.
+This stat is then made available to users when they log in the next day.
+Key Points:
+
+Automate the stat generation process using Lambda.
+CloudWatch rules can trigger the job at a set time every day.
+Checklist to Complete Your Project
+Frontend (React):
+
+Set up project structure, connect to backend via APIs.
+Deploy to S3 + CloudFront.
+Backend (Node.js + Express):
+
+API endpoints for stats retrieval and user submissions.
+Integrate with MySQL (later RDS) and AWS Cognito for authentication.
+Database:
+
+Design schema for user data, stats, machine learning outputs.
+Migrate from local MySQL to AWS RDS.
+Machine Learning:
+
+Develop, train, and test a model locally.
+Deploy to AWS SageMaker or Lambda for inference.
+Authentication (Cognito):
+
+Set up user pool, integrate sign-up/login in frontend.
+Secure API routes with Cognito.
+Automation:
+
+Use AWS CloudWatch + Lambda to generate and store daily stats.
+Monitoring and Scaling:
+
+Use AWS CloudWatch for monitoring and AWS Auto Scaling/Elastic Load Balancing if using EC2.
