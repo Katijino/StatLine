@@ -1,0 +1,21 @@
+#game_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates 3 columns of equal width */
+    gap: 20px; /* Adds space between the grid items */
+    justify-items: center; /* Centers the content of each grid item */
+    margin-top: 20px;
+  }
+  
+  .game {
+    padding: 20px;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 250px;
+    text-align: center;
+    transition: background-color 0.3s;
+  }
+  
+  .game:hover {
+    background-color: #dcdcdc;
+  }
