@@ -1,0 +1,29 @@
+.games-container {
+    width: 100%; /* Full width of the screen */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping to the next line */
+    scroll-behavior: smooth; /* Smooth scrolling behavior */
+  }
+  
+  .games-grid {
+    display: flex; /* Use flexbox for horizontal layout */
+    flex-wrap: nowrap; /* Ensure the items don't wrap */
+    gap: 20px; /* Space between game tiles */
+    padding: 10px;
+  }
+  
+  .individual_game {
+    background-color: #f0f0f0;
+    flex: 0 0 calc(25% - 20px); /* Each game takes 25% of the container width, minus the gap */
+    padding: 20px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .individual_game:hover {
+    background-color: #dcdcdc;
+    
+  }
+  

@@ -1,0 +1,86 @@
+.bod {
+    display: flex;             /* Enables flexbox layout */
+    justify-content: center;   /* Centers the box horizontally */
+}
+
+.box {
+    display: inline-block;     /* Adjusts to the size of the content */
+    padding: 10px;             /* Padding around the image */
+    border: 2px solid black;   /* Border around the box */
+}
+
+img {
+    max-width: 100%;           /* Ensures image scales responsively */
+    height: auto;              /* Maintains the aspect ratio of the image */
+    display: block;            /* Removes the bottom gap below the image */
+}
+
+.guess-container {
+    display:flex;
+    width: 700px;
+    margin: 0 auto;
+}
+
+.guess-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.suggestions-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+}
+
+.suggestions-list li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestions-list li:hover {
+    background-color: #f0f0f0;
+}
+.player-info {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); /* 8 equal columns for each detail */
+    justify-items: center;                 /* Center each item in its grid column */
+    align-items: center;                   /* Vertically center the content */
+    padding: 20px;
+    gap: 10px;                             /* Optional gap between the columns */
+    border-bottom: 1px solid #ccc;         /* Separate each player-info with a line */
+}
+
+.player-name, .player-detail, .player-name-guess, .player-detail-guess {
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+}
+
+.player-name {
+    font-size: 24px; /* Larger font for the name */
+    font-weight: bold;
+}
+
+.guessed-players {
+    margin-top: 20px;
+}
+
+.player-name-guess {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.player-detail-guess {
+    font-size: 16px;
+}

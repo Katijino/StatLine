@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import './GamesDisplayer.css';
+import './css/GamesDisplayer.css';
 
 function GamesDisplayer() {
   const scrollRef = useRef(null); // Reference to the scrollable container
