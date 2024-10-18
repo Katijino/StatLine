@@ -1,0 +1,96 @@
+/* Main container */
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+/* Player box */
+.playerbox {
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    width: 40%;
+}
+
+.playerbox:hover {
+    transform: translateY(-10px);
+}
+
+/* Player name */
+.player-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+}
+
+/* Player image */
+.player-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Guess button */
+.guess-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.guess-button:hover {
+    background-color: #45a049;
+}
+
+/* VS text */
+.vs-text {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #555;
+    margin: 0 20px;
+    align-self: center;
+}
+
+/* Feedback section */
+.feedback {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #ff5722;
+    font-weight: bold;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .playerbox {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .vs-text {
+        margin: 20px 0;
+    }
+}
