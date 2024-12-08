@@ -37,3 +37,8 @@ Store questions from previous days and allow users to go back through and answer
 
 
 
+To run backend:
+python app.py
+
+frontend:
+npm start
