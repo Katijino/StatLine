@@ -1,29 +1,58 @@
 .games-container {
-    width: 100%; /* Full width of the screen */
-    overflow-x: auto; /* Enable horizontal scrolling */
-    white-space: nowrap; /* Prevent wrapping to the next line */
-    scroll-behavior: smooth; /* Smooth scrolling behavior */
-  }
-  
-  .games-grid {
-    display: flex; /* Use flexbox for horizontal layout */
-    flex-wrap: nowrap; /* Ensure the items don't wrap */
-    gap: 20px; /* Space between game tiles */
-    padding: 10px;
-  }
-  
-  .individual_game {
-    background-color: #f0f0f0;
-    flex: 0 0 calc(25% - 20px); /* Each game takes 25% of the container width, minus the gap */
-    padding: 20px;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    text-align: center;
-    transition: background-color 0.3s ease;
-  }
-  
-  .individual_game:hover {
-    background-color: #dcdcdc;
-    
-  }
-  
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  scroll-behavior: smooth; /* Smooth scrolling behavior */
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.games-grid {
+  display: flex; /* Flex container for horizontal layout */
+  flex-direction: row;
+  gap: 20px; /* Spacing between game items */
+}
+
+.game-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(219, 207, 207);
+  justify-content: center;
+  border: 1px solid #333; /* Optional: Subtle border for definition */
+  border-radius: 16px; /* Rounded edges for the bubble effect */
+  padding: 20px; /* Increased padding for a spacious bubble */
+  min-width: 250px; /* Ensure consistent width */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow for a lifted effect */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+}
+
+.game-item:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.game-time {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.team-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.team-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.team-name, .team-score {
+  font-size: 1rem;
+  margin: 0;
+}

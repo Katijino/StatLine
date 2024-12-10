@@ -1,5 +1,9 @@
 import requests
 import sqlite3
+import make_database
+
+def remake():
+    make_database.make()
 def ret():
     conn = sqlite3.connect("game_data.db")
     cursor = conn.cursor()

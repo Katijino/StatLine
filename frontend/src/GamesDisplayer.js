@@ -6,6 +6,14 @@ function GamesDisplayer() {
   const scrollRef = useRef(null); // Reference to the scrollable container
 
   // Fetch data from the backend
+  const resetGames = async () => {
+    try {
+      const response = await fetch('/api/header/reset_games');
+    }
+    catch(error) {
+      console.error('Error resetting games:',error);
+    }
+  };
   const fetchGames = async () => {
     try {
       const response = await fetch('/api/header'); // Replace with your API URL
@@ -26,6 +34,7 @@ function GamesDisplayer() {
 
       // Fetch at 12:01 AM
       if (hours === 0 && minutes === 1) {
+        resetGames();
         fetchGames();
       }
 
@@ -42,38 +51,30 @@ function GamesDisplayer() {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-scroll logic
-  useEffect(() => {
-    const scrollContainer = scrollRef.current;
-
-    const scrollInterval = setInterval(() => {
-      if (scrollContainer) {
-        // Scroll the container by a fixed number of pixels (e.g., 250px)
-        scrollContainer.scrollBy({ left: 410, behavior: 'smooth' });
-
-        // If reached the end, scroll back to the beginning
-        if (scrollContainer.scrollLeft + scrollContainer.offsetWidth >= scrollContainer.scrollWidth) {
-          scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
-        }
-      }
-    }, 2000); // Adjust the interval time to your needs (e.g., every 2 seconds)
-
-    // Clean up the interval when the component is unmounted
-    return () => clearInterval(scrollInterval);
-  }, []);
-
   return (
-    <div className="games-container" ref={scrollRef}> {/* Attach the ref */}
+    <div className="games-container" ref={scrollRef}>
       <div className="games-grid">
         {games.length > 0 ? (
           games.map((game, index) => (
-            <div key={index} className="individual_game">
-              <p>{game.team1_abbr} vs {game.team2_abbr}</p>
-              <p>Time: {game.game_time || 'TBD'}</p>
-              <p>Status: {game.status || 'Unknown'}</p>
-              <a href={game.game_link} target="_blank" rel="noopener noreferrer">
-                View Details
-              </a>
+            <div key={index} className="game-item">
+              {/* Row 1: Game time or finished status */}
+              <div className="game-time">
+                <p>{game.game_time_or_finished}</p>
+              </div>
+              
+              {/* Row 2: Team 1 - Logo, name, and score */}
+              <div className="team-row">
+                <img className="team-logo" src={game.team1_logo} alt={`${game.team1_abbr} logo`} />
+                <p className="team-name">{game.team1_abbr}</p>
+                <p className="team-score">{game.team1_record_or_score}</p>
+              </div>
+              
+              {/* Row 3: Team 2 - Logo, name, and score */}
+              <div className="team-row">
+                <img className="team-logo" src={game.team2_logo} alt={`${game.team2_abbr} logo`} />
+                <p className="team-name">{game.team2_abbr}</p>
+                <p className="team-score">{game.team2_record_or_score}</p>
+              </div>
             </div>
           ))
         ) : (

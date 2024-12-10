@@ -9,6 +9,12 @@ def get_db_conn():
     conn.row_factory = sqlite3.Row
     return conn
 
+@app.route('/api/header/reset_games',methods=['GET'])
+def reset():
+    retrieve.remake()
+    sleep(1)
+
+
 @app.route('/api/header',methods = ['GET'])
 def get_all_games():
     retrieve.ret()
