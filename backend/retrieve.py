@@ -1,6 +1,8 @@
 import requests
 import sqlite3
 import make_database
+import pandas as pd
+import random
 
 def remake():
     make_database.make()
@@ -72,3 +74,59 @@ def ret():
     else:
         print(f"Failed to fetch data. Status code: {response.status_code}")
     conn.close()
+
+def conference(team):
+    team = team.upper()
+    if team in ["ATL", "CHA", "MIA", "ORL", "WAS","BOS", "BKN", "NYK", "PHI", "TOR","CHI", "CLE", "DET", "IND", "MIL"]:
+        return "East"
+    return "West"
+
+def division(team):
+    team = team.upper()  # Ensure the input is case-insensitive
+
+    if team in ["ATL", "CHA", "MIA", "ORL", "WAS"]:
+        return "SE"
+    elif team in ["BOS", "BKN", "NYK", "PHI", "TOR"]:
+        return "ATL"
+    elif team in ["CHI", "CLE", "DET", "IND", "MIL"]:
+        return "CEN"
+    elif team in ["DAL", "HOU", "MEM", "NOP", "SAS"]:
+        return "SW"
+    elif team in ["DEN", "MIN", "OKC", "POR", "UTA"]:
+        return "NW"
+    elif team in ["GSW", "LAC", "LAL", "PHX", "SAC"]:
+        return "PAC"
+    else:
+        return "N/A"
+
+def get_random_player_now():
+    df = pd.read_csv("data/Player_Career_Info.csv")
+    filtered_players = df[df['last_seas'] == 2025]
+    random_player = filtered_players.sample(n=1)
+    print(random_player)
+    df = pd.read_csv("data/Player Season Info.csv")
+    player_id = random_player.iloc[0]['player_id']
+    player = df[(df['player_id'] == player_id) & (df['season'] == 2025)]
+    print(player)
+    team = player.iloc[0]['tm']
+    div = division(team)
+    conf = conference(team)
+    position = player.iloc[0]['pos']
+    df = pd.read_csv("data/Player Per Game.csv")
+    player_stats = df[(df['player_id'] == player_id) & (df['season'] == 2025)]
+    print(player_stats)
+    name = player.iloc[0]['player']
+    team = player.iloc[0]['tm']
+    div = division(team)
+    conf = conference(team)
+    position = player.iloc[0]['pos']
+    age = player_stats.iloc[0]['age']
+    ppg = player_stats.iloc[0]['pts_per_game']
+    apg = player_stats.iloc[0]['ast_per_game']
+    rpg = player_stats.iloc[0]['reb_per_game']
+    ret = [name,team,conf,div,position,age,ppg,apg,rpg]
+    return ret
+
+    
+if __name__ == '__main__':
+    get_random_player_now()

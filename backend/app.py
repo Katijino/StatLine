@@ -14,6 +14,25 @@ def reset():
     retrieve.remake()
     sleep(1)
 
+@app.route('/api/games/GTP', methods =['GET'])
+def get_random_player():
+    return
+
+
+@app.route('/api/games/HigherLower', methods =['GET'])
+def get_two_players():
+    return
+
+
+
+@app.route('/api/games/StatLineGuesser', methods =['GET'])
+def get_random_statline():
+    return
+
+
+@app.route('/api/games/StatOfTheDay', methods =['GET'])
+
+
 
 @app.route('/api/header',methods = ['GET'])
 def get_all_games():
