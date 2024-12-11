@@ -8,6 +8,7 @@ function GuessThePlayer() {
     const [TargetPlayer,SetPlayer] = useState([]);
     const [guesses, setGuesses] = useState([]); // Store the guesses
 
+
     const fetchRandom = async () =>{
         try{
             const response = await fetch('/api/games/GTP');
@@ -44,9 +45,18 @@ function GuessThePlayer() {
     
 
     // Function to handle player selection
-    const handlePlayerClick = (player) => {
+    const handlePlayerClick =async (e) => {
+
         if (guesses.length < 8) { // Allow only up to 8 guesses
-            setGuesses(prevGuesses => [...prevGuesses, player]);
+            try{
+                const query = e;
+                const response = await fetch(`/api/games/GTP/player_by_name?name=${encodeURIComponent(query)}`);
+                const player = await response.json();
+                console.log(player);
+                setGuesses(prevGuesses => [...prevGuesses, player]);            
+            }catch(error){
+                console.log('Error fetching player:',error)
+            }  
             setInput(''); // Clear input after selection
         }
         setFilteredPlayers([]); // Clear suggestions after selection
@@ -59,19 +69,18 @@ function GuessThePlayer() {
                     <img src={headshot} alt="headshot" />
                 </div>
             </div>
-            <div className="guess-container">
+            <div className="parent-container">
                 <input
                     type="text"
                     className="guess-input"
                     placeholder="Guess an NBA player"
                     value={input}
                     onChange={handleInputChange}
-                    disabled={guesses.length >= 8} // Disable input after 8 guesses
                 />
                 {filteredPlayers.players && filteredPlayers.players.length > 0 && (
-                    <div className="suggestions-container">
+                    <div className="suggestions-box">
                         <ul className="suggestions-list">
-                            {filteredPlayers.players.map((player, index) => (
+                            {filteredPlayers.players.slice(0, 10).map((player, index) => (
                                 <li key={index} onClick={() => handlePlayerClick(player)}>
                                     {player}
                                 </li>
@@ -79,10 +88,7 @@ function GuessThePlayer() {
                         </ul>
                     </div>
                 )}
-
-
             </div>
-
             {/* Display each guessed player's details */}
             <div className="player-info">
                 <div className="player-name">Name</div>
@@ -98,15 +104,15 @@ function GuessThePlayer() {
             <div className="guessed-players">
                 {guesses.map((player, index) => (
                     <div key={index} className="player-info">
-                        <div className="player-name-guess">{player.firstName} {player.lastName}</div>
+                        <div className="player-name-guess">{player.name}</div>
                         <div className="player-detail-guess">{player.team}</div>
                         <div className="player-detail-guess">{player.conference}</div>
                         <div className="player-detail-guess">{player.division}</div>
                         <div className="player-detail-guess">{player.position}</div>
                         <div className="player-detail-guess">{player.age}</div>
-                        <div className="player-detail-guess">{player.ppg} pts</div>
-                        <div className="player-detail-guess">{player.apg}asts</div>
-                        <div className="player-detail-guess">{player.rpg}rbs</div>
+                        <div className="player-detail-guess">{player.ppg}</div>
+                        <div className="player-detail-guess">{player.apg}</div>
+                        <div className="player-detail-guess">{player.rpg}</div>
                     </div>
                 ))}
             </div>

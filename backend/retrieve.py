@@ -123,7 +123,7 @@ def get_random_player_now():
     age = player_stats.iloc[0]['age']
     ppg = player_stats.iloc[0]['pts_per_game']
     apg = player_stats.iloc[0]['ast_per_game']
-    rpg = player_stats.iloc[0]['reb_per_game']
+    rpg = player_stats.iloc[0]['trb_per_game']
     ret = [name,team,conf,div,position,age,ppg,apg,rpg]
     return ret
 
@@ -161,9 +161,7 @@ def get_list_of_players_first_name(query):
 def get_list_of_players_last_name(query):
     """
     Filters players whose last name starts with the given query (case-insensitive).
-    """
-    import pandas as pd
-    
+    """    
     # Read the CSV file
     df = pd.read_csv("data/Player_Career_Info.csv")
 
@@ -183,7 +181,34 @@ def get_list_of_players_last_name(query):
     # Return sorted player names
     return sorted(players)
 
-    
+def get_player_by_name(name):
+    df = pd.read_csv("data/Player_Career_Info.csv")
+    filtered_players = df[df['last_seas'] == 2025]
+    random_player = df[df['player'] == name]
+    df = pd.read_csv("data/Player Season Info.csv")
+    player_id = random_player.iloc[0]['player_id']
+    player = df[(df['player_id'] == player_id) & (df['season'] == 2025)]
+    print(player)
+    team = player.iloc[0]['tm']
+    div = division(team)
+    conf = conference(team)
+    position = player.iloc[0]['pos']
+    df = pd.read_csv("data/Player Per Game.csv")
+    player_stats = df[(df['player_id'] == player_id) & (df['season'] == 2025)]
+    print(player_stats)
+    name = player.iloc[0]['player']
+    team = player.iloc[0]['tm']
+    div = division(team)
+    conf = conference(team)
+    position = player.iloc[0]['pos']
+    age = player_stats.iloc[0]['age']
+    ppg = player_stats.iloc[0]['pts_per_game']
+    apg = player_stats.iloc[0]['ast_per_game']
+    rpg = player_stats.iloc[0]['trb_per_game']
+    ret = [name,team,conf,div,position,age,ppg,apg,rpg]
+    return ret
+
+
+
 if __name__ == '__main__':
-    s = get_list_of_players_last_name("Ja")
-    print(len(s))
+    s = get_player_by_name("Ja Morant")
