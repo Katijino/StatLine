@@ -7,20 +7,7 @@ function GuessThePlayer() {
     const [filteredPlayers, setFilteredPlayers] = useState([]);
     const [TargetPlayer,SetPlayer] = useState([]);
     const [guesses, setGuesses] = useState([]); // Store the guesses
-    const fetchSpecific = async (query) => {
-        try {
-            const response = await fetch(`/api/games/GTP/Specific?name=${encodeURIComponent(query)}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            setFilteredPlayers(data);
-            console.log("Data fetched at:", new Date().toLocaleTimeString());
-        } catch (error) {
-            console.log('Error fetching player list:', error);
-        }
-    };
-    
+
     const fetchRandom = async () =>{
         try{
             const response = await fetch('/api/games/GTP');
@@ -30,38 +17,31 @@ function GuessThePlayer() {
         }catch(error){
             console.log('Error fetched player:',error);
         }
-    }
-    const handInputChange(e) => {
-        const query = e.target.value;
-        setInput(query);
-        if (query.length >0) {
-            fetchSpecific(query);
-
-        }
-    }
-    // Function to handle input change
-    const handleInputChange = (e) => {
-        const query = e.target.value;
-        setInput(query);
-
+    };
+    const handleInputChange = async (e) => {
+        const query = e.target.value; // Get the current input value
+        setInput(query); // Update the input state
+    
         if (query.length > 0) {
-            const suggestions = players
-                .filter(player =>
-                    player.firstName.toLowerCase().startsWith(query.toLowerCase()) ||
-                    player.lastName.toLowerCase().startsWith(query.toLowerCase())
-                )
-                .sort((a, b) => {
-                    if (a.firstName.toLowerCase() === b.firstName.toLowerCase()) {
-                        return a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase());
-                    }
-                    return a.firstName.toLowerCase().localeCompare(b.firstName.toLowerCase());
-                });
-
-            setFilteredPlayers(suggestions);
+            try {
+                // Fetch the filtered and sorted players from the backend
+                const response = await fetch(`/api/games/GTP/Specific?name=${encodeURIComponent(query)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+    
+                const players = await response.json(); // Directly use the backend-provided data
+                console.log(players);
+                setFilteredPlayers(players); // Update the state with the backend response
+            } catch (error) {
+                console.error("Error fetching filtered players:", error);
+                setFilteredPlayers([]); // Clear filtered players on error
+            }
         } else {
-            setFilteredPlayers([]);
+            setFilteredPlayers([]); // Clear filtered players if input is empty
         }
     };
+    
 
     // Function to handle player selection
     const handlePlayerClick = (player) => {
@@ -88,15 +68,19 @@ function GuessThePlayer() {
                     onChange={handleInputChange}
                     disabled={guesses.length >= 8} // Disable input after 8 guesses
                 />
-                {filteredPlayers.length > 0 && (
-                    <ul className="suggestions-list">
-                        {filteredPlayers.map((player, index) => (
-                            <li key={index} onClick={() => handlePlayerClick(player)}>
-                                {player.firstName} {player.lastName}
-                            </li>
-                        ))}
-                    </ul>
+                {filteredPlayers.players && filteredPlayers.players.length > 0 && (
+                    <div className="suggestions-container">
+                        <ul className="suggestions-list">
+                            {filteredPlayers.players.map((player, index) => (
+                                <li key={index} onClick={() => handlePlayerClick(player)}>
+                                    {player}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 )}
+
+
             </div>
 
             {/* Display each guessed player's details */}

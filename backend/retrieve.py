@@ -127,6 +127,63 @@ def get_random_player_now():
     ret = [name,team,conf,div,position,age,ppg,apg,rpg]
     return ret
 
+
+
+
+
+
+def get_list_of_players_first_name(query):
+    """
+    Filters players whose first name starts with the given query (case-insensitive).
+    """
+    # Read the CSV file
+    df = pd.read_csv("data/Player_Career_Info.csv")
+
+    # Filter players whose 'last_seas' is 2025
+    filtered_players = df[df['last_seas'] == 2025]
+
+    # Filter players by last name
+    filtered_players = filtered_players[
+        filtered_players['player']
+        .str.lower().str.startswith(query.lower(), na=False)  # Case-insensitive filtering
+    ]
+
+    # Extract the player names into a list
+    players = filtered_players['player'].tolist()
+
+    # Print players for debugging
+    print("Filtered Players by First Name:", players)
+
+    # Return sorted player names
+    return sorted(players)
+
+
+def get_list_of_players_last_name(query):
+    """
+    Filters players whose last name starts with the given query (case-insensitive).
+    """
+    import pandas as pd
+    
+    # Read the CSV file
+    df = pd.read_csv("data/Player_Career_Info.csv")
+
+    # Filter players whose 'last_seas' is 2025
+    filtered_players = df[df['last_seas'] == 2025]
+
+    # Filter players by last name
+    filtered_players = filtered_players[
+        filtered_players['player']
+        .str.split().str[1]  # Extract the last name
+        .str.lower().str.startswith(query.lower(), na=False)  # Case-insensitive filtering
+    ]
+
+    # Extract the player names into a list
+    players = filtered_players['player'].tolist()
+
+    # Return sorted player names
+    return sorted(players)
+
     
 if __name__ == '__main__':
-    get_random_player_now()
+    s = get_list_of_players_last_name("Ja")
+    print(len(s))

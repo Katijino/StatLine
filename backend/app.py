@@ -14,13 +14,26 @@ def reset():
     retrieve.remake()
     sleep(1)
 
-@app.route('api/header/GTP/Specific',methods=['GET'])
+@app.route('/api/games/GTP/Specific', methods=['GET'])
 def get_specific_player():
-    query = request.args.get('name',None)
-    first_players = retrieve.get_list_of_players_first_name()
-    last_player = retrieve.get_list_of_players_last_name()
-    sorted = sorted(first_players)+sorted(last_player)
-    return jsonify({"players":sorted})
+    name = request.args.get('name', None)
+
+    if not name:
+        return jsonify({"error": "Query parameter 'name' is required"}), 400
+
+    try:
+        # Retrieve players by first and last name
+        print("this is my query "+str(name))
+        first_players = retrieve.get_list_of_players_first_name(name) or []
+        last_players = retrieve.get_list_of_players_last_name(name) or []
+        combined_players = set(first_players+last_players)
+        print(len(combined_players))
+        return jsonify(players=list(combined_players))
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error in get_specific_player: {e}")
+        return jsonify({"error": "Internal Server Error"}), 500
+
 
 
 

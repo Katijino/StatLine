@@ -29,28 +29,59 @@ img {
     border-radius: 4px;
 }
 
+/* Parent container to position suggestions relative to the input */
+.parent-container {
+    position: relative;
+    width: 100%; /* Ensure the width is restricted to the parent */
+}
+
+/* Suggestions container */
+.suggestions-container {
+    position: absolute; /* Position relative to the parent container */
+    top: 100%; /* Position directly below the input box */
+    background-color: white; /* White background for the dropdown */
+    border: 1px solid #ddd; /* Light border around the dropdown */
+    border-radius: 4px; /* Rounded corners for the dropdown */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    width: 100%; /* Match the width of the input box */
+    max-height: 200px; /* Limit height to fit 10 items */
+    overflow-y: auto; /* Enable vertical scrolling for overflow */
+    z-index: 1000; /* Ensure it appears above other elements */
+}
+
+/* Suggestions list styling */
 .suggestions-list {
-    list-style: none;
+    list-style-type: none; /* Remove bullet points */
     margin: 0;
     padding: 0;
-    border: 1px solid #ccc;
-    border-top: none;
-    max-height: 150px;
-    overflow-y: auto;
-    background-color: white;
-    position: absolute;
-    width: 100%;
-    z-index: 1000;
 }
 
+/* Each suggestion item */
 .suggestions-list li {
-    padding: 8px;
-    cursor: pointer;
+    padding: 10px 15px; /* Add spacing inside each suggestion */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    background-color: white; /* Default background color */
+    overflow: hidden; /* Prevent text from overflowing */
+    text-overflow: ellipsis; /* Add ellipsis for long text */
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
-.suggestions-list li:hover {
-    background-color: #f0f0f0;
+/* Add a scrollbar style if needed */
+.suggestions-container::-webkit-scrollbar {
+    width: 6px;
 }
+
+.suggestions-container::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+
+/* Highlight the suggestion when hovered */
+.suggestions-list li:hover {
+    background-color: rgb(219, 207, 207); /* Light gray background for hover */
+}
+
 .player-info {
     display: grid;
     grid-template-columns: repeat(8, 1fr); /* 8 equal columns for each detail */
