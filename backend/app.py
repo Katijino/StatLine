@@ -14,9 +14,37 @@ def reset():
     retrieve.remake()
     sleep(1)
 
-@app.route('/api/games/GTP', methods =['GET'])
+@app.route('api/header/GTP/Specific',methods=['GET'])
+def get_specific_player():
+    query = request.args.get('name',None)
+    first_players = retrieve.get_list_of_players_first_name()
+    last_player = retrieve.get_list_of_players_last_name()
+    sorted = sorted(first_players)+sorted(last_player)
+    return jsonify({"players":sorted})
+
+
+
+@app.route('/api/games/GTP', methods=['GET'])
 def get_random_player():
-    return
+    # Get the player data as a list
+    l = retrieve.get_random_player_now()
+
+    # Convert the list into a dictionary for clarity and structure
+    player_data = {
+        "name": l[0],
+        "team": l[1],
+        "conference": l[2],
+        "division": l[3],
+        "position": l[4],
+        "age": l[5],
+        "ppg": l[6],
+        "apg": l[7],
+        "rpg": l[8]
+    }
+
+    # Return the dictionary as a JSON response
+    return jsonify(player_data)
+
 
 
 @app.route('/api/games/HigherLower', methods =['GET'])
