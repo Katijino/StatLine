@@ -3,6 +3,8 @@ import '../css/GuessThePlayer.css';
 import headshot from "./img/headshot.png";
 import downarrow from "./img/downarrow.png";
 import uparrow from "./img/uparrow.png";
+import check from "./img/check.png";
+import checkyellow from "./img/yellowcheck.png";
 
 function GuessThePlayer() {
     const [input, setInput] = useState('');
@@ -11,6 +13,8 @@ function GuessThePlayer() {
     const [guesses, setGuesses] = useState([]); // Store the guesses
     const [started, setStarted] = useState(false); // Track whether the game has started
     const [won, setWon] = useState(false); // Track whether the player has won
+    const [closeness,setClose] = useState([]);
+
 
     const fetchRandom = async () => {
         try {
@@ -24,6 +28,73 @@ function GuessThePlayer() {
         }
     };
 
+    const closenum = (int2, int1) => {
+        if (Math.abs(int2 - int1) <= 2) {
+            return true; // int1 is 2 or less away from int2
+        } else {
+            return false; // int1 is more than 2 away from int2
+        }
+    };
+    
+
+    const close = (pos2, pos1) => {
+        if (pos1 == "PG"){
+            if (pos2 == "SG"){
+                return true;
+            }
+            return false;
+        }
+        else if (pos1 == "SG"){
+            if (pos2 == "SF" || pos2 == "PG"){
+                return true;
+            }
+            return false;
+        }
+        else if (pos1 == "SF"){
+            if (pos2 == "SG" ||pos2 == "PF"){
+                return true;
+            }
+            return false;
+        }
+        else if (pos1 == "PF"){
+            if (pos2 == "SF" || pos2 == "C"){
+                return true;
+            }
+            return false;
+        }
+        else if (pos1 == "C"){
+            if (pos2 == "PF"){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    const compareAttributes = (goalValue, currentValue, isNumeric = false) => {
+        if (goalValue === currentValue) return 2;
+        if (!isNumeric && close(goalValue,currentValue)) return 1;
+        if (isNumeric && closenum(goalValue, currentValue)) return 1;
+        return 0;
+    };
+    
+    const ParseCloseness = (player) => {
+        const goal = TargetPlayer;
+        const current = player;
+        // [team, conf, div, pos, age, ppg, apg, rpg]
+        const ret = [];
+        ret.push(compareAttributes(goal.team, current.team));
+        ret.push(compareAttributes(goal.conference, current.conference));
+        ret.push(compareAttributes(goal.division, current.division));
+        ret.push(compareAttributes(goal.position, current.position));
+        ret.push(compareAttributes(goal.age, current.age, true));
+        ret.push(compareAttributes(goal.ppg, current.ppg, true));
+        ret.push(compareAttributes(goal.apg, current.apg, true));
+        ret.push(compareAttributes(goal.rpg, current.rpg, true));
+        setClose((prevClose) => [...prevClose,ret]);
+        console.log(closeness);
+
+
+    }
     const handleInputChange = async (e) => {
         const query = e.target.value; // Get the current input value
         setInput(query); // Update the input state
@@ -48,12 +119,11 @@ function GuessThePlayer() {
 
     const handlePlayerClick = async (e) => {
         if (guesses.length < 8) { // Allow only up to 8 guesses
-            console.log("Target Player"+TargetPlayer);
             try {
                 const query = e;
                 const response = await fetch(`/api/games/GTP/player_by_name?name=${encodeURIComponent(query)}`);
                 const player = await response.json();
-                console.log(player);
+                ParseCloseness(player);
                 setGuesses((prevGuesses) => [...prevGuesses, player]);
                 if (e == TargetPlayer.name) {
                     setWon(true); // Player guessed correctly
@@ -74,6 +144,7 @@ function GuessThePlayer() {
     const restartGame = () => {
         SetPlayer([]); // Clear the random player
         setGuesses([]); // Clear all guesses
+        setClose([]);
         setWon(false); // Reset the win state
         fetchRandom(); // Fetch a new random player
     };
@@ -133,21 +204,53 @@ function GuessThePlayer() {
                                 key={index}
                                 className="player-info"
                                 style={{
-                                    backgroundColor: won && index == guesses.length - 1 ? 'lightgreen' : 'white'
+                                    backgroundColor: won && index === guesses.length - 1 ? 'lightgreen' : 'white'
                                 }}
                             >
-                                <div className="player-name-guess">{player.name}</div>
-                                <div className="player-detail-guess">{player.team}</div>
-                                <div className="player-detail-guess">{player.conference}</div>
-                                <div className="player-detail-guess">{player.division}</div>
-                                <div className="player-detail-guess">{player.position}</div>
-                                <div className="player-detail-guess">{player.age}</div>
-                                <div className="player-detail-guess">{player.ppg}</div>
-                                <div className="player-detail-guess">{player.apg}</div>
-                                <div className="player-detail-guess">{player.rpg}</div>
+                                <div className="player-name-guess">
+                                    <span>{player.name}</span>
+                                </div>
+                                <div className="player-detail-guess">
+                                    <span>{player.team}</span>
+                                    {closeness[index][0] === 1 && <img className="closeness-check" src={check} alt="Checkmark" />}
+                                </div>
+                                <div className="player-detail-guess">
+                                    <span>{player.conference}</span>
+                                    {closeness[index][1] === 1 && <img className="closeness-check" src={check} alt="Checkmark" />}
+                                </div>
+                                <div className="player-detail-guess">
+                                    <span>{player.division}</span>
+                                    {closeness[index][2] === 1 && <img className="closeness-check" src={check} alt="Checkmark" />}
+                                </div>
+                                <div className="player-detail-guess">
+                                    <span>{player.position}</span>
+                                    {closeness[index][3] === 2 && <img className="closeness-check" src={check} alt="Checkmark" />}
+                                    {closeness[index][3] === 1 && <img className="closeness-check" src={checkyellow} alt="Checkmark" />}
+                                </div>
+                                <div className="player-detail-guess">
+                                    <span>{player.age}</span>
+                                    {closeness[index][4] === 2 && <img className="closeness-check" src={check} alt="Checkmark" />}
+                                    {closeness[index][4] === 1 && <img className="closeness-check" src={checkyellow} alt="Checkmark" />}
+                                </div>
+                                <div className="player-detail-guess">
+                                    <span>{player.ppg}</span>
+                                    {closeness[index][5] === 2 && <img className="closeness-check" src={check} alt="Checkmark" />}
+                                    {closeness[index][5] === 1 && <img className="closeness-check" src={checkyellow} alt="Checkmark" />}
+                                </div>
+                                <div className="player-detail-guess">
+                                    <span>{player.apg}</span>
+                                    {closeness[index][6] === 2 && <img className="closeness-check" src={check} alt="Checkmark" />}
+                                    {closeness[index][6] === 1 && <img className="closeness-check" src={checkyellow} alt="Checkmark" />}
+                                </div>
+                                <div className="player-detail-guess">
+                                    <span>{player.rpg}</span>
+                                    {closeness[index][7] === 2 && <img className="closeness-check" src={check} alt="Checkmark" />}
+                                    {closeness[index][7] === 1 && <img className="closeness-check" src={checkyellow} alt="Checkmark" />}
+                                </div>
                             </div>
                         ))}
                     </div>
+
                 </>
             )}
         </>

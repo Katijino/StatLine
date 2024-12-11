@@ -30,16 +30,6 @@ img {
 }
 
 
-.player-info {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr); /* 9 equal columns for each detail */
-    justify-items: center;                 /* Center each item in its grid column */
-    align-items: center;                   /* Vertically center the content */
-    padding: 20px;
-    gap: 10px;                             /* Optional gap between the columns */
-    border-bottom: 1px solid #ccc;         /* Separate each player-info with a line */
-}
-
 .player-name, .player-detail, .player-name-guess, .player-detail-guess {
     font-size: 18px;
     font-weight: normal;
@@ -50,18 +40,44 @@ img {
     font-size: 24px; /* Larger font for the name */
     font-weight: bold;
 }
-
+/* Guessed players container */
 .guessed-players {
     margin-top: 20px;
 }
 
-.player-name-guess {
-    font-size: 20px;
-    font-weight: bold;
+/* Player details grid layout */
+.player-info {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr); /* 9 equal columns for each detail */
+    justify-items: center;                 /* Center each item in its grid column */
+    align-items: center;                   /* Vertically center the content */
+    padding: 20px;
+    gap: 10px;                             /* Gap between grid items */
+    border-bottom: 1px solid #ccc;         /* Separator between players */
+    background-color: white;               /* Default background color */
+    border-radius: 8px;                    /* Rounded corners for aesthetics */
 }
 
+/* Name with larger font size */
+.player-name-guess {
+    font-size: 22px; /* Slightly larger font size for name */
+    font-weight: bold; /* Emphasize the name */
+    text-align: center; /* Center the name text */
+}
+
+/* Details with standard font size */
 .player-detail-guess {
-    font-size: 16px;
+    font-size: 16px; /* Standard font size for details */
+    display: flex; /* Align text and checkmark horizontally */
+    align-items: center; /* Vertically center the content */
+    gap: 5px; /* Add spacing between the text and the checkmark */
+}
+
+/* Checkmark image styling */
+.closeness-check {
+    width: 16px; /* Small size for the checkmarks */
+    height: 16px; /* Maintain aspect ratio */
+    object-fit: contain; /* Ensure the image scales proportionally */
 }
 
 /* Parent container for positioning */
