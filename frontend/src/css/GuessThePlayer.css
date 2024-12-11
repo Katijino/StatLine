@@ -133,3 +133,42 @@ img {
 .suggestions-box::-webkit-scrollbar-track {
     background-color: #f9f9f9;
 }
+
+
+.start-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #f0f0f0; /* Light background color */
+}
+
+.start-button {
+    font-size: 24px;
+    padding: 10px 20px;
+    background-color: #2e0854; /* Dark purple */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.start-button:hover {
+    background-color: #4b0082; /* Lighter purple on hover */
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+.restart-button {
+    font-size: 16px;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.restart-button:hover {
+    background-color: #0056b3;
+}

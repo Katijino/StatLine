@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../css/HigherLower.css';
-import headshot from "./headshot.png"; // Use for the player images
+import headshot from "./img/headshot.png"; // Use for the player images
 
 function HigherLower() {
     // State to track the correct player and feedback

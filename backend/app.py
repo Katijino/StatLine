@@ -39,9 +39,9 @@ def get_random_player():
         "division": l[3],
         "position": l[4],
         "age": l[5],
-        "ppg": l[6],
-        "apg": l[7],
-        "rpg": l[8]
+        "ppg": int(l[6]),
+        "apg": int(l[7]),
+        "rpg": int(l[8]),
     }
 
     # Return the dictionary as a JSON response
@@ -81,9 +81,9 @@ def getoneplayer():
             "division": l[3],
             "position": l[4],
             "age": l[5],
-            "ppg": l[6],
-            "apg": l[7],
-            "rpg": l[8]
+            "ppg": int(l[6]),
+            "apg": int(l[7]),
+            "rpg": int(l[8]),
         }
 
         # Return the dictionary as a JSON response
